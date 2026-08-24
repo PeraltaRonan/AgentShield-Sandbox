@@ -143,7 +143,7 @@ Navigated through AgentShield folder:
 
 
 ## For Terminal 2:
--Open up another Ubuntu(Acts like an AI Agent(Attacker):
+-Open up another Ubuntu(Acts like an AI Agent(Attacker)):
 
 *How to activate attack:*
 Navigated through AgentShield folder:
