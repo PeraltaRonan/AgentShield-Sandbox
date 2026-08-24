@@ -171,9 +171,9 @@ When an unauthorized command execution occurs inside the sandbox, Falco triggers
 
 ## Screenshots of Audit:
 
-| Evidence Phase | Interactive Github Link | Preview |
-| :--- | :--- | :--- |
-| **1. AI-AGENT** *(Pre-Attack)* | [AI-Agent(Attacker).JPG](https://github.com/PeraltaRonan/AgentShield-Sandbox/blob/main/Screenshots/AI-Agent(Attacker).JPG) | ![AI-Agent](Screenshots/Falco_Live_initialized(BEFORE%20ATTACKS).jpeg) |
-| **1. Falco Live Initialized** *(BEFORE ATTACKS)* | [Falco Live Initialized(BEFORE ATTACKS)](https://github.com/PeraltaRonan/AgentShield-Sandbox/blob/main/Screenshots/Falco_Live_initialized(BEFORE%20ATTACKS).JPG) | ![Falco Live Initialized](Screenshots/Falco_Live_initialized(BEFORE%20ATTACKS).jpeg) |
-| **1. Falco_terminal(AFTER ATTACKS WITH ALERTS)** | [Falco_terminal(AFTER ATTACKS WITH ALERTS)](https://github.com/PeraltaRonan/AgentShield-Sandbox/blob/main/Screenshots/Falco_terminal(AFTER%20ATTACKS%20WITH%20ALERTS).JPG) | ![Falco Terminal](Screenshots/Falco_Live_initialized(BEFORE%20ATTACKS).jpeg) |
-| **1. Sandbox Security_ Audit Passed** *(Pre-Attack)* | [Sandbox Security_ Audit Passed](https://github.com/PeraltaRonan/AgentShield-Sandbox/blob/main/Screenshots/sanbox_security_%20audit_passed.JPG) | ![Sandbox Security Audit Passed](Screenshots/Falco_Live_initialized(BEFORE%20ATTACKS).jpeg) |
+| Evidence Phase | Interactive Github Link |
+| :--- | :--- |
+| **1. AI-AGENT** *(Pre-Attack)* | [AI-Agent(Attacker).JPG](https://github.com/PeraltaRonan/AgentShield-Sandbox/blob/main/Screenshots/AI-Agent(Attacker).JPG) |
+| **1. Falco Live Initialized** *(BEFORE ATTACKS)* | [Falco Live Initialized(BEFORE ATTACKS)](https://github.com/PeraltaRonan/AgentShield-Sandbox/blob/main/Screenshots/Falco_Live_initialized(BEFORE%20ATTACKS).JPG) |
+| **1. Falco_terminal(AFTER ATTACKS WITH ALERTS)** | [Falco_terminal(AFTER ATTACKS WITH ALERTS)](https://github.com/PeraltaRonan/AgentShield-Sandbox/blob/main/Screenshots/Falco_terminal(AFTER%20ATTACKS%20WITH%20ALERTS).JPG) |
+| **1. Sandbox Security_ Audit Passed** *(Pre-Attack)* | [Sandbox Security_ Audit Passed](https://github.com/PeraltaRonan/AgentShield-Sandbox/blob/main/Screenshots/sanbox_security_%20audit_passed.JPG) |
