@@ -105,3 +105,11 @@ When an unauthorized command execution occurs inside the sandbox, Falco triggers
 ```text
 [CRITICAL ALERT] Agent Sandbox Anomaly! Process=sh Command=sh -c whoami User=1000 Container=agentshield_sandbox
 ```
+
+
+Docker Container- 
+
+-Updated system packages
+- Installed a docker, git and essential build tools
+- enable docker service inside WSL2
+- Add my user to the docker group
