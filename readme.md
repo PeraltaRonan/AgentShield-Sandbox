@@ -171,7 +171,7 @@ When an unauthorized command execution occurs inside the sandbox, Falco triggers
 
 ## Screenshots of Audit:
 
-| Evidence Phase | Interactive Github Link |
+| Evidence Phase | Github Link |
 | :--- | :--- |
 | **1. AI-AGENT** *(Pre-Attack)* | [AI-Agent(Attacker).JPG](https://github.com/PeraltaRonan/AgentShield-Sandbox/blob/main/Screenshots/AI-Agent(Attacker).JPG) |
 | **1. Falco Live Initialized** *(BEFORE ATTACKS)* | [Falco Live Initialized(BEFORE ATTACKS)](https://github.com/PeraltaRonan/AgentShield-Sandbox/blob/main/Screenshots/Falco_Live_initialized(BEFORE%20ATTACKS).JPG) |
