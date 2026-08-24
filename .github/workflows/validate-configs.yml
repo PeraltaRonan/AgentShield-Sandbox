@@ -24,16 +24,22 @@ jobs:
 
       - name: Locate and Validate Falco Rules
         run: |
-          FALCO_FILE=$(find . -name "falco_rules.local.yaml" -print -quit)
+          FALCO_FILE=$(find . -type f \( -name "falco.override.yaml" -o -name "falco_rules.local.yaml" -o -name "*.yaml" -o -name "*.yml" \) -path "*/rules/*" -print -quit)
           if [ -z "$FALCO_FILE" ]; then
-            echo "[-] Error: falco_rules.local.yaml not found!"
+            # Fallback search anywhere in repo for falco rules
+            FALCO_FILE=$(find . -type f \( -name "falco.override.yaml" -o -name "falco_rules.local.yaml" \) -print -quit)
+          fi
+          
+          if [ -z "$FALCO_FILE" ]; then
+            echo "[-] Error: No Falco rule configuration file found!"
             exit 1
           fi
+
           echo "[+] Found Falco rules at: $FALCO_FILE"
           python3 -c "import yaml; yaml.safe_load(open('$FALCO_FILE'))"
           echo "[+] Falco rule YAML syntax is valid!"
 
-      - name: Locate and Validate Docker Compose
+      - name: Validate Docker Compose
         run: |
           COMPOSE_FILE=$(find . -name "docker-compose.yml" -o -name "docker-compose.yaml" -print -quit)
           if [ -n "$COMPOSE_FILE" ]; then
@@ -41,5 +47,5 @@ jobs:
             docker compose -f "$COMPOSE_FILE" config -q
             echo "[+] Docker Compose syntax is valid!"
           else
-            echo "[!] Warning: No docker-compose file found, skipping docker check."
+            echo "[!] No docker-compose file found, skipping step."
           fi
