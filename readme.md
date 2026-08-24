@@ -171,19 +171,13 @@ When an unauthorized command execution occurs inside the sandbox, Falco triggers
 
 ## Screenshots of Audit:
 
-Click any preview image below to view the high-resolution evidence file directly in the repository:
-
 | Evidence Phase | Interactive Github Link | Preview |
 | :--- | :--- | :--- |
 | **1. Falco Live Initialized** *(Pre-Attack)* | (Screenshots/Falco_Live_initialized(BEFORE%20ATTACKS).jpeg) | <a href="https://github.com/PeraltaRonan/AgentShield-Sandbox/blob/main/Screenshots/AI-Agent(Attacker).JPG">AI-Agent(Attacker).JPG</a> |
 
+| **1. Falco Live Initialized** *(Pre-Attack)* | (Screenshots/Falco_Live_initialized(BEFORE%20ATTACKS).jpeg) | <a href="https://github.com/PeraltaRonan/AgentShield-Sandbox/blob/main/Screenshots/AI-Agent(Attacker).JPG">AI-Agent(Attacker).JPG</a> |
 
-| **2. AI Agent Attacker** *(Execution)* | [📄 View Raw Image](Screenshots/AI-Agent(Attacker).jpeg) | <a href="Screenshots/AI-Agent(Attacker).jpeg"><img src="Screenshots/AI-Agent(Attacker).jpeg" width="250" alt="AI Agent Attack"/></a> |
+| **1. Falco Live Initialized** *(Pre-Attack)* | (Screenshots/Falco_Live_initialized(BEFORE%20ATTACKS).jpeg) | <a href="https://github.com/PeraltaRonan/AgentShield-Sandbox/blob/main/Screenshots/AI-Agent(Attacker).JPG">AI-Agent(Attacker).JPG</a> |
 
+| **1. Falco Live Initialized** *(Pre-Attack)* | (Screenshots/Falco_Live_initialized(BEFORE%20ATTACKS).jpeg) | <a href="https://github.com/PeraltaRonan/AgentShield-Sandbox/blob/main/Screenshots/AI-Agent(Attacker).JPG">AI-Agent(Attacker).JPG</a> |
 
-| **3. Falco Terminal** *(Post-Attack Alerts)* | [📄 View Raw Image](Screenshots/Falco_terminal(AFTER%20ATTACKS%20WITH%20ALERTS).jpeg) | <a href="Screenshots/Falco_terminal(AFTER%20ATTACKS%20WITH%20ALERTS).jpeg"><img src="Screenshots/Falco_terminal(AFTER%20ATTACKS%20WITH%20ALERTS).jpeg" width="250" alt="Falco Alerts Captured"/></a> |
-
-
-| **4. Sandbox Security Audit** *(Passed)* | [📄 View Raw Image](Screenshots/sanbox_security_%20audit_passed.jpeg) | <a href="Screenshots/sanbox_security_%20audit_passed.jpeg"><img src="Screenshots/sanbox_security_%20audit_passed.jpeg" width="250" alt="Sandbox Audit Passed"/></a> |
-
----
