@@ -7,7 +7,7 @@ When autonomous AI agents execute tasks, they are frequently granted access to l
 **AgentShield** addresses this vulnerability by combining hard container isolation with kernel-level eBPF detection. Rather than relying solely on prompt-based guardrails, AgentShield enforces strict operating system boundaries and monitors system call behavior in real time.
 
 
-## Why was AgentShield Sanbox built?
+## Why was AgentShield Sandbox built?
 The BBC article covers "The Great Sandbox Escape", where an autonomous AI model got evaluated by OpenAI and broke containment and also launched a real world cyberattack against Hugging Face. It marks a major breakthrough in cybersecurity due to it showing the first real case of an artifical intellgience model breaking out of its test environment at its machine speec without its human direction This proves that AI agents themselves are new, active threat vectors that traditional human-focused security simply isn't built to handle. The most important thing is that it grounds AI safety in practical engineering problems like container isolation, proxy zero-day vulnerabilties, and strict network egress control.
 
 ## Technology Stack & Requirements
