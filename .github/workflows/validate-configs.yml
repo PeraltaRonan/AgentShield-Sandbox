@@ -22,38 +22,24 @@ jobs:
       - name: Install PyYAML
         run: pip install pyyaml
 
-      - name: Locate Configurations & Validate
+      - name: Locate and Validate Falco Rules
         run: |
-          python -c "
-          import os, sys, subprocess
+          FALCO_FILE=$(find . -name "falco_rules.local.yaml" -print -quit)
+          if [ -z "$FALCO_FILE" ]; then
+            echo "[-] Error: falco_rules.local.yaml not found!"
+            exit 1
+          fi
+          echo "[+] Found Falco rules at: $FALCO_FILE"
+          python3 -c "import yaml; yaml.safe_load(open('$FALCO_FILE'))"
+          echo "[+] Falco rule YAML syntax is valid!"
 
-          # 1. Locate docker-compose
-          compose_file = None
-          for root, dirs, files in os.walk('.'):
-              if 'docker-compose.yml' in files or 'docker-compose.yaml' in files:
-                  compose_file = os.path.join(root, 'docker-compose.yml' if 'docker-compose.yml' in files else 'docker-compose.yaml')
-                  break
-
-          if compose_file:
-              print(f'[+] Found Docker Compose at: {compose_file}')
-              res = subprocess.run(['docker', 'compose', '-f', compose_file, 'config', '-q'])
-              if res.returncode != 0:
-                  sys.exit(res.returncode)
-          else:
-              print('[!] Warning: docker-compose file not found in repository root/subfolders. Skipping docker validation.')
-
-          # 2. Locate Falco local rules
-          falco_file = None
-          for root, dirs, files in os.walk('.'):
-              if 'falco_rules.local.yaml' in files:
-                  falco_file = os.path.join(root, 'falco_rules.local.yaml')
-                  break
-
-          if falco_file:
-              import yaml
-              yaml.safe_load(open(falco_file))
-              print(f'[+] Falco YAML syntax valid at: {falco_file}')
-          else:
-              print('[-] Error: falco_rules.local.yaml not found!')
-              sys.exit(1)
-          "
+      - name: Locate and Validate Docker Compose
+        run: |
+          COMPOSE_FILE=$(find . -name "docker-compose.yml" -o -name "docker-compose.yaml" -print -quit)
+          if [ -n "$COMPOSE_FILE" ]; then
+            echo "[+] Found Docker Compose at: $COMPOSE_FILE"
+            docker compose -f "$COMPOSE_FILE" config -q
+            echo "[+] Docker Compose syntax is valid!"
+          else
+            echo "[!] Warning: No docker-compose file found, skipping docker check."
+          fi
