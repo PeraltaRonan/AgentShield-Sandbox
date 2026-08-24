@@ -22,22 +22,31 @@ jobs:
       - name: Install PyYAML
         run: pip install pyyaml
 
-      - name: Locate and Validate Falco Rules
+      - name: Validate All YAML Files
         run: |
-          FALCO_FILE=$(find . -type f \( -name "falco.override.yaml" -o -name "falco_rules.local.yaml" -o -name "*.yaml" -o -name "*.yml" \) -path "*/rules/*" -print -quit)
-          if [ -z "$FALCO_FILE" ]; then
-            # Fallback search anywhere in repo for falco rules
-            FALCO_FILE=$(find . -type f \( -name "falco.override.yaml" -o -name "falco_rules.local.yaml" \) -print -quit)
-          fi
-          
-          if [ -z "$FALCO_FILE" ]; then
-            echo "[-] Error: No Falco rule configuration file found!"
-            exit 1
-          fi
+          python3 -c "
+          import os, sys, yaml
 
-          echo "[+] Found Falco rules at: $FALCO_FILE"
-          python3 -c "import yaml; yaml.safe_load(open('$FALCO_FILE'))"
-          echo "[+] Falco rule YAML syntax is valid!"
+          yaml_files = []
+          for root, dirs, files in os.walk('.'):
+              if '.github' in root or '.git' in root:
+                  continue
+              for f in files:
+                  if f.endswith('.yaml') or f.endswith('.yml'):
+                      yaml_files.append(os.path.join(root, f))
+
+          if not yaml_files:
+              print('[-] Error: No YAML files found in the repo!')
+              sys.exit(1)
+
+          for f_path in yaml_files:
+              try:
+                  yaml.safe_load(open(f_path))
+                  print(f'[+] Valid YAML syntax: {f_path}')
+              except Exception as e:
+                  print(f'[-] Invalid YAML syntax in {f_path}: {e}')
+                  sys.exit(1)
+          "
 
       - name: Validate Docker Compose
         run: |

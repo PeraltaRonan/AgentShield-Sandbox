@@ -1,0 +1,16 @@
+
+services:
+  agentshield_sandbox:
+    image: python:3.11-slim
+    container_name: agentshield_sandbox
+    command: sleep infinity
+    read_only: true
+    user: "1000:1000"
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    mem_limit: 512m
+    cpus: 0.5
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=64m
