@@ -107,9 +107,33 @@ When an unauthorized command execution occurs inside the sandbox, Falco triggers
 ```
 
 
-Docker Container- 
+## Stage 1 - Infrastructure Setup-
 
--Updated system packages
-- Installed a docker, git and essential build tools
+- Updated system packages
+- Installed a docker, git and essential build tools( needed to install additional files to run docker)
 - enable docker service inside WSL2
-- Add my user to the docker group
+- Add my user to the docker group( additional linux packages was needed to be installed)
+
+
+## Stage 2 - Creating a workspace-
+- Implemented a (Sandbox) inside docker using bash through nano.
+- Implemented (Detection Rules) inside docker using bash through nano.
+- Implemented (Test Script) inside docker using bash through nano.
+
+## Stage 3 - Enforcing Security & Execution
+- Trust Falco's GPG key
+- Add Falco Repo int apt sources
+- update repos and install falco
+
+- Add same Detection Rules from 
+- Run Falco with Modern eBPF Engine(eBPF Engine is a small software system inside Linux Kernel.Safely runs customer small programs and acts like a fast programmablelater for monitoring, network, and security.)
+
+## Stage 4 - Triggering the ALERT-
+
+-Open up another Ubuntu(Acts like an AI Agent(Attacker).)
+
+*How to activate attack:*
+Navigated through AgentShield folder:
+    cd~/AgentShield
+
+    run: ./scripts/simulate_escape.sh
