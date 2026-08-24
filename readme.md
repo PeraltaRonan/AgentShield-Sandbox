@@ -1,35 +1,38 @@
-# AgentShield: Container Isolation & eBPF Runtime Security
+###### AgentShield: Container Isolation & eBPF Runtime Security
 
-> **A zero-trust sandbox and kernel-level runtime monitoring architecture built on Linux (Ubuntu/Kali) to prevent Agentic AI sandbox escapes, unauthorized shell executions, and lateral network movement.**
 
----
-
-## 📌 Project Overview
-
+##  Project Overview
 When autonomous AI agents execute tasks, they are frequently granted access to local shell environments and system utilities. As highlighted in recent security research, agents can exploit environment flaws, escape sandboxes, and make unauthorized calls to external resources.
 
 **AgentShield** addresses this vulnerability by combining hard container isolation with kernel-level eBPF detection. Rather than relying solely on prompt-based guardrails, AgentShield enforces strict operating system boundaries and monitors system call behavior in real time.
 
----
 
-## 🛠️ Technology Stack & Requirements
+## Why was AgentShield Sanbox built?
+The BBC article covers "The Great Sandbox Escape", where an autonomous AI model got evaluated by OpenAI and broke containment and also launched a real world cyberattack against Hugging Face. It marks a major breakthrough in cybersecurity due to it showing the first real case of an artifical intellgience model breaking out of its test environment at its machine speec without its human direction This proves that AI agents themselves are new, active threat vectors that traditional human-focused security simply isn't built to handle. The most important thing is that it grounds AI safety in practical engineering problems like container isolation, proxy zero-day vulnerabilties, and strict network egress control.
+
+## Technology Stack & Requirements
 
 | Layer | Technology | Purpose |
 | :--- | :--- | :--- |
-| **Operating System** | **Ubuntu / Kali Linux (Native, VM, or WSL2)** | Host environment for Linux kernel interface and Docker runtime |
+| **Operating System** | **Ubuntu via WSL2** | Host environment for Linux kernel interface and Docker runtime |
 | **Containerization** | **Docker & Docker Compose v2** | Environment isolation and privilege dropping for non-deterministic agent code |
 | **Runtime Security** | **Falco (Modern eBPF)** | Out-of-band kernel telemetry to capture unauthorized `execve` system calls |
 | **System Logging** | **Systemd / `journalctl`** | Host log extraction for immediate event auditing |
+| **Automation & Alerting** | **Bash (simulate_escape.sh) & Python** | Automated attack simulation and HTTP webhook receiver script for SOC SIEM telemetry integration |
+| **CI/CD Pipeline** | **GitHub Actions** | Automated YAML syntax verification and Docker Compose configuration linting on push |
 
----
 
-## 🏗️ Architecture & File Structure
 
-```text
+
+## Architecture & File Structure
+
 AgentShield/
 ├── .github/
 │   └── workflows/
 │       └── validate-configs.yml    # CI/CD workflow to validate Compose and YAML syntax
+|
+|
+|
 ├── rules/
 │   └── falco_rules.local.yaml      # Custom Falco eBPF detection rules
 ├── scripts/
@@ -45,9 +48,8 @@ AgentShield/
 2. **eBPF Kernel Monitoring:** Falco monitors `execve` system calls directly at the Linux kernel boundary.
 3. **Detection & Alerting:** If the agent spawns an unauthorized binary (e.g., `/bin/sh`, `curl`), Falco intercepts the system call and generates an immediate critical event in host system logs.
 
----
 
-## 🚀 Quick Start Guide
+## Quick Start Guide
 
 ### 1. Initialize Workspace & Configuration
 ```bash
@@ -98,7 +100,7 @@ chmod +x scripts/simulate_escape.sh
 
 ---
 
-## 🧪 Expected Telemetry Output
+## Expected Telemetry Output
 
 When an unauthorized command execution occurs inside the sandbox, Falco triggers a kernel-level alert logged via `journalctl`:
 
@@ -128,12 +130,42 @@ When an unauthorized command execution occurs inside the sandbox, Falco triggers
 - Add same Detection Rules from 
 - Run Falco with Modern eBPF Engine(eBPF Engine is a small software system inside Linux Kernel.Safely runs customer small programs and acts like a fast programmablelater for monitoring, network, and security.)
 
-## Stage 4 - Triggering the ALERT-
+## Stage 4 - Triggering the ALERT:
 
--Open up another Ubuntu(Acts like an AI Agent(Attacker).)
+## For Terminal 1:
+-Open up another Ubuntu():
+
+*How to activate Falco Detection:*
+Navigated through AgentShield folder:
+    cd~/AgentShield
+
+    Type: start-falco
+
+
+## For Terminal 2:
+-Open up another Ubuntu(Acts like an AI Agent(Attacker):
 
 *How to activate attack:*
 Navigated through AgentShield folder:
     cd~/AgentShield
 
-    run: ./scripts/simulate_escape.sh
+```bash
+chmod +x scripts/simulate_escape.sh
+./scripts/simulate_escape.sh
+```
+
+## Expected Telemetry Output
+
+When an unauthorized command execution occurs inside the sandbox, Falco triggers a kernel-level alert logged via `journalctl`:
+
+```text
+[CRITICAL ALERT] Agent Sandbox Anomaly! Process=sh Command=sh -c whoami User=1000 Container=agentshield_sandbox
+```
+
+
+
+## Stage 5 - CI/CD Pipeline-
+
+## Stage 6 - Webhook -
+
+
