@@ -150,11 +150,14 @@ Navigated through AgentShield folder:
     cd~/AgentShield
 
 ```bash
-chmod +x scripts/simulate_escape.sh
-./scripts/simulate_escape.sh
+>
+chmod += scripts/simulate_escape.sh
+>
+bash ./scripts/simulate_escape.sh
+>
 ```
 
-## Expected Telemetry Output
+## Expected Telemetry Output From Terminal 2:
 
 When an unauthorized command execution occurs inside the sandbox, Falco triggers a kernel-level alert logged via `journalctl`:
 
