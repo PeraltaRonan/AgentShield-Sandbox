@@ -1,0 +1,31 @@
+name: Validate AgentShield Security Configurations
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+  validate-configs:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Validate Docker Compose File
+        run: docker compose config -q
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-python-version: '3.10'
+
+      - name: Install PyYAML
+        run: pip install pyyaml
+
+      - name: Validate Falco Rule Syntax
+        run: |
+          python -c "import yaml; yaml.safe_load(open('rules/falco_rules.local.yaml'))"
+          echo "[+] Falco YAML rule syntax is valid."
