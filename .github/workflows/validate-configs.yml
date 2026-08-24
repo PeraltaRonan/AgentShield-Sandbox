@@ -20,12 +20,16 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-python-version: '3.10'
+          python-version: '3.10'
 
       - name: Install PyYAML
         run: pip install pyyaml
 
       - name: Validate Falco Rule Syntax
         run: |
-          python -c "import yaml; yaml.safe_load(open('rules/falco_rules.local.yaml'))"
-          echo "[+] Falco YAML rule syntax is valid."
+          python -c "
+          import yaml, os
+          path = 'rules/falco_rules.local.yaml' if os.path.exists('rules/falco_rules.local.yaml') else 'falco_rules.local.yaml'
+          yaml.safe_load(open(path))
+          print('[+] Falco YAML syntax is valid at:', path)
+          "
