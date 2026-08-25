@@ -25,31 +25,7 @@ The BBC article covers "The Great Sandbox Escape", where an autonomous AI model 
 
 
 
-## Architecture & File Structure
 
-AgentShield-Sandbox/
-├── .github/
-│   └── workflows/
-│       └── validate-configs.yml                       # CI/CD workflow to validate Compose and YAML syntax
-├── rules/
-│   └── falco_rules.local.yaml                         # Custom Falco eBPF detection rules
-|
-|
-├── Screenshots/
-│   ├── AI-Agent(Attacker).JPG                         # Pre-attack execution screenshot
-│   ├── CICD Pipeline-workflow.JPG                     # CI/CD GitHub Actions workflow verification screenshot
-│   ├── Falco_Live_initialized(BEFORE ATTACKS).JPG     # Baseline Falco kernel listener screenshot
-│   ├── Falco_terminal(AFTER ATTACKS WITH ALERTS).JPG  # Triggered alert telemetry log screenshot
-│   └── sanbox_security_ audit_passed.JPG              # Sandbox security compliance report screenshot
-|
-|
-├── scripts/
-│   └── simulate_escape.sh                             # Automated attack execution & testing script
-├── docker-compose.yml                                 # Hardened container sandbox definition
-├── email_webhook.py                                   # Python Flask listener & SMTP dispatch server
-└── readme.md                                          # Main project documentation
-```
-```
 ## System Workflow
 
 **Hardened Execution** - The AI agent operates strictly inside a locked-down container with dropped Linux capabilities (cap_drop: [ALL]), a read-only root file system, and unprivileged user mappings (1000:1000).
@@ -61,11 +37,11 @@ AgentShield-Sandbox/
 **Automated Incident Response** - The Flask server (email_webhook.py) captures the webhook payload and automatically sends an authenticated SMTP security alert email to the SOC team.
 
 
----
 
 ## File Structure
+| Evidence Phase |
 | :--- | :--- |
-| **1. AI-AGENT** *(Pre-Attack)* | [AI-Agent(Attacker).JPG](https://github.com/PeraltaRonan/AgentShield-Sandbox/blob/main/Screenshots/AI-Agent(Attacker).JPG) |
+| **File Structure**  | [file_structure.JPG](https://github.com/PeraltaRonan/AgentShield-Sandbox/blob/main/Screenshots/file_structure.JPG) |
 
 
 
@@ -159,8 +135,6 @@ Email of *audit* will be sent through receipent.
 - Installed  Python3 Pip using - (sudo apt update && sudo apt install -y python3-pip)
 - Installed Flask dependency using - (pip install flask --break-system-packages) or (sudo apt install python3-flask)
 - Allow script execution permissions on my AgentShield repositoryscripts using  - (chmod +x ./scripts/simulate_escape.sh)
-
-App Password = uurs veiw tsxi swvm
 
 
 ## Screenshots of Audit:
