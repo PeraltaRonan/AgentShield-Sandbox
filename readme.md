@@ -92,7 +92,75 @@ services:
   priority: WARNING
 ```
 
-### 4. Run Testing Script
+### 4. Implementation CI/CD Pipeline('.github/workflows/validate-configs.yml')
+```yaml
+mkdir -p .github/workflows
+cat << 'EOF' > .github/workflows/validate-configs.yml
+name: Validate AgentShield Security Configurations
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+  validate-configs:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install PyYAML
+        run: pip install pyyaml
+
+      - name: Validate All YAML Files
+        run: |
+          python3 -c "
+          import os, sys, yaml
+
+          yaml_files = []
+          for root, dirs, files in os.walk('.'):
+              if '.github' in root or '.git' in root:
+                  continue
+              for f in files:
+                  if f.endswith('.yaml') or f.endswith('.yml'):
+                      yaml_files.append(os.path.join(root, f))
+
+          if not yaml_files:
+              print('[-] Error: No YAML files found in the repo!')
+              sys.exit(1)
+
+          for f_path in yaml_files:
+              try:
+                  yaml.safe_load(open(f_path))
+                  print(f'[+] Valid YAML syntax: {f_path}')
+              except Exception as e:
+                  print(f'[-] Invalid YAML syntax in {f_path}: {e}')
+                  sys.exit(1)
+          "
+
+      - name: Validate Docker Compose
+        run: |
+          COMPOSE_FILE=$(find . -name "docker-compose.yml" -o -name "docker-compose.yaml" -print -quit)
+          if [ -n "$COMPOSE_FILE" ]; then
+            echo "[+] Found Docker Compose at: $COMPOSE_FILE"
+            docker compose -f "$COMPOSE_FILE" config -q
+            echo "[+] Docker Compose syntax is valid!"
+          else
+            echo "[!] No docker-compose file found, skipping step."
+          fi
+EOF
+```
+
+
+### 5. Run Testing Script
 ```bash
 chmod +x scripts/simulate_escape.sh
 ./scripts/simulate_escape.sh
