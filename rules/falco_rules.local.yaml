@@ -8,3 +8,10 @@
     [CRITICAL ALERT] Agent Sandbox Anomaly!
     Process=%proc.name | Command=%proc.cmdline | User=%user.name | Container=%container.name
   priority: WARNING
+
+json_output: true
+
+program_output:
+  enabled: true
+  keep_alive: false
+  program: "curl -s -X POST http://127.0.0.1:5000/webhook -H 'Content-Type: application/json' -d @-"

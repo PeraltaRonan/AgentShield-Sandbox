@@ -20,153 +20,52 @@ The BBC article covers "The Great Sandbox Escape", where an autonomous AI model 
 | **System Logging** | **Systemd / `journalctl`** | Host log extraction for immediate event auditing |
 | **Automation & Alerting** | **Bash (simulate_escape.sh) & Python** | Automated attack simulation and HTTP webhook receiver script for SOC SIEM telemetry integration |
 | **CI/CD Pipeline** | **GitHub Actions** | Automated YAML syntax verification and Docker Compose configuration linting on push |
-
+****Webhook Engine** | **Python 3 & Flask (email_webhook.py)**	Real-time HTTP POST listener processing JSON security event payloads from Falco |
+**Notification Engine** |	**SMTP via TLS (Gmail API)** |	Automated email dispatch routing executive summaries and raw telemetry audit logs |
 
 
 
 ## Architecture & File Structure
 
-AgentShield/
+AgentShield-Sandbox/
 ├── .github/
 │   └── workflows/
-│       └── validate-configs.yml    # CI/CD workflow to validate Compose and YAML syntax
-|
-|
-|
+│       └── validate-configs.yml                       # CI/CD workflow to validate Compose and YAML syntax
 ├── rules/
-│   └── falco_rules.local.yaml      # Custom Falco eBPF detection rules
+│   └── falco_rules.local.yaml                         # Custom Falco eBPF detection rules
+|
+|
+├── Screenshots/
+│   ├── AI-Agent(Attacker).JPG                         # Pre-attack execution screenshot
+│   ├── CICD Pipeline-workflow.JPG                     # CI/CD GitHub Actions workflow verification screenshot
+│   ├── Falco_Live_initialized(BEFORE ATTACKS).JPG     # Baseline Falco kernel listener screenshot
+│   ├── Falco_terminal(AFTER ATTACKS WITH ALERTS).JPG  # Triggered alert telemetry log screenshot
+│   └── sanbox_security_ audit_passed.JPG              # Sandbox security compliance report screenshot
+|
+|
 ├── scripts/
-│   └── simulate_escape.sh          # Automated test execution and alerting script
-├── .gitignore                      # Environment and temporary log exclusions
-├── docker-compose.yml              # Hardened container sandbox definition
-├── LICENSE                         # Open-source license (MIT)
-└── README.md                       # Main project documentation
+│   └── simulate_escape.sh                             # Automated attack execution & testing script
+├── docker-compose.yml                                 # Hardened container sandbox definition
+├── email_webhook.py                                   # Python Flask listener & SMTP dispatch server
+└── readme.md                                          # Main project documentation
 ```
-
+```
 ## System Workflow
-1. **Hardened Execution:** The AI agent operates strictly inside a locked-down container with dropped Linux capabilities (`cap_drop: [ALL]`), a read-only root file system, and unprivileged user mappings (`1000:1000`).
-2. **eBPF Kernel Monitoring:** Falco monitors `execve` system calls directly at the Linux kernel boundary.
-3. **Detection & Alerting:** If the agent spawns an unauthorized binary (e.g., `/bin/sh`, `curl`), Falco intercepts the system call and generates an immediate critical event in host system logs.
 
+**Hardened Execution** - The AI agent operates strictly inside a locked-down container with dropped Linux capabilities (cap_drop: [ALL]), a read-only root file system, and unprivileged user mappings (1000:1000).
 
-## Quick Start Guide
+**eBPF Kernel Monitoring** -Falco monitors execve system calls directly at the Linux kernel boundary.
 
-### 1. Initialize Workspace & Configuration
-```bash
-mkdir -p AgentShield/rules AgentShield/scripts AgentShield/.github/workflows
-cd AgentShield
-```
+**Detection & Webhook Relay** - If the agent spawns an unauthorized binary (e.g., /bin/sh, curl), Falco intercepts the system call, constructs a JSON payload, and posts it via HTTP Webhook to port 5000.
 
-### 2. Hardened Sandbox Setup (`docker-compose.yml`)
-```yaml
-version: '3.8'
+**Automated Incident Response** - The Flask server (email_webhook.py) captures the webhook payload and automatically sends an authenticated SMTP security alert email to the SOC team.
 
-services:
-  agentshield_sandbox:
-    image: python:3.11-slim
-    container_name: agentshield_sandbox
-    command: sleep infinity
-    read_only: true
-    user: "1000:1000"
-    cap_drop:
-      - ALL
-    security_opt:
-      - no-new-privileges:true
-    mem_limit: 512m
-    cpus: 0.5
-    tmpfs:
-      - /tmp:rw,noexec,nosuid,size=64m
-```
-
-### 3. Falco Detection Rule (`rules/falco_rules.local.yaml`)
-```yaml
-- rule: AgentShield Sandbox Escape Attempt
-  desc: Detects unexpected process execution inside the restricted agent sandbox
-  condition: >
-    container.name = "agentshield_sandbox" and
-    evt.type = execve and
-    proc.name in (bash, sh, zsh, nc, nmap, curl, wget)
-  output: >
-    [CRITICAL ALERT] Agent Sandbox Anomaly!
-    Process=%proc.name | Command=%proc.cmdline | User=%user.name | Container=%container.name
-  priority: WARNING
-```
-
-### 4. Implementation CI/CD Pipeline('.github/workflows/validate-configs.yml')
-```yaml
-mkdir -p .github/workflows
-cat << 'EOF' > .github/workflows/validate-configs.yml
-name: Validate AgentShield Security Configurations
-
-on:
-  push:
-    branches: [ "main", "master" ]
-  pull_request:
-    branches: [ "main", "master" ]
-
-jobs:
-  validate-configs:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.10'
-
-      - name: Install PyYAML
-        run: pip install pyyaml
-
-      - name: Validate All YAML Files
-        run: |
-          python3 -c "
-          import os, sys, yaml
-
-          yaml_files = []
-          for root, dirs, files in os.walk('.'):
-              if '.github' in root or '.git' in root:
-                  continue
-              for f in files:
-                  if f.endswith('.yaml') or f.endswith('.yml'):
-                      yaml_files.append(os.path.join(root, f))
-
-          if not yaml_files:
-              print('[-] Error: No YAML files found in the repo!')
-              sys.exit(1)
-
-          for f_path in yaml_files:
-              try:
-                  yaml.safe_load(open(f_path))
-                  print(f'[+] Valid YAML syntax: {f_path}')
-              except Exception as e:
-                  print(f'[-] Invalid YAML syntax in {f_path}: {e}')
-                  sys.exit(1)
-          "
-
-      - name: Validate Docker Compose
-        run: |
-          COMPOSE_FILE=$(find . -name "docker-compose.yml" -o -name "docker-compose.yaml" -print -quit)
-          if [ -n "$COMPOSE_FILE" ]; then
-            echo "[+] Found Docker Compose at: $COMPOSE_FILE"
-            docker compose -f "$COMPOSE_FILE" config -q
-            echo "[+] Docker Compose syntax is valid!"
-          else
-            echo "[!] No docker-compose file found, skipping step."
-          fi
-EOF
-```
-
-
-### 5. Run Testing Script
-```bash
-chmod +x scripts/simulate_escape.sh
-./scripts/simulate_escape.sh
-```
 
 ---
+
+## File Structure
+| :--- | :--- |
+| **1. AI-AGENT** *(Pre-Attack)* | [AI-Agent(Attacker).JPG](https://github.com/PeraltaRonan/AgentShield-Sandbox/blob/main/Screenshots/AI-Agent(Attacker).JPG) |
 
 ## Expected Telemetry Output
 
@@ -235,9 +134,24 @@ When an unauthorized command execution occurs inside the sandbox, Falco triggers
 
 
 
-## Stage 5 - CI/CD Pipeline-
+### Stage 5 - CI/CD Pipeline - Webhook -
 
-## Stage 6 - Webhook -
+
+ # Writing Rules & Automation-
+- Added security rules by configuring Falco to listen for any suspicious activity.
+  Or hav running unexpected privilege checks inside a sandbox.
+
+- Created a file under Python tto add a lightweight Flask application that acts like a reciever.
+ Opens port 5000 to process any incoming JSON alerts.
+
+- Created a shell script to spin up the target container, and execute any unexpected commands to trigger the system intentionality.
+
+# Environment Setup
+- Installed  Python3 Pip using - (sudo apt update && sudo apt install -y python3-pip)
+- Installed Flask dependency using - (pip install flask --break-system-packages) or (sudo apt install python3-flask)
+- Allow script execution permissions on my AgentShield repositoryscripts using  - (chmod +x ./scripts/simulate_escape.sh)
+
+App Password = uurs veiw tsxi swvm
 
 
 ## Screenshots of Audit:
