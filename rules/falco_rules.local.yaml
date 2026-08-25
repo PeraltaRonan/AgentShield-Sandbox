@@ -1,13 +1,14 @@
-- rule: AgentShield Sandbox Escape Attempt
-  desc: Detects unexpected process execution inside the restricted agent sandbox
-  condition: >
-    container.name = "agentshield_sandbox" and
-    evt.type = execve and
-    proc.name in (bash, sh, zsh, nc, nmap, curl, wget)
-  output: >
-    [CRITICAL ALERT] Agent Sandbox Anomaly!
-    Process=%proc.name | Command=%proc.cmdline | User=%user.name | Container=%container.name
-  priority: WARNING
+rules:
+  - rule: AgentShield Sandbox Escape Attempt
+    desc: Detects unexpected process execution inside the restricted agent sandbox
+    condition: >
+      container.name = "agentshield_sandbox" and
+      evt.type = execve and
+      proc.name in (bash, sh, zsh, nc, nmap, curl, wget)
+    output: >
+      [CRITICAL ALERT] Agent Sandbox Anomaly!
+      Process=%proc.name | Command=%proc.cmdline | User=%user.name | Container=%container.name
+    priority: WARNING
 
 json_output: true
 
