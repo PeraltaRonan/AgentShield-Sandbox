@@ -67,13 +67,7 @@ AgentShield-Sandbox/
 | :--- | :--- |
 | **1. AI-AGENT** *(Pre-Attack)* | [AI-Agent(Attacker).JPG](https://github.com/PeraltaRonan/AgentShield-Sandbox/blob/main/Screenshots/AI-Agent(Attacker).JPG) |
 
-## Expected Telemetry Output
 
-When an unauthorized command execution occurs inside the sandbox, Falco triggers a kernel-level alert logged via `journalctl`:
-
-```text
-[CRITICAL ALERT] Agent Sandbox Anomaly! Process=sh Command=sh -c whoami User=1000 Container=agentshield_sandbox
-```
 
 
 ## Stage 1 - Infrastructure Setup-
@@ -99,6 +93,16 @@ When an unauthorized command execution occurs inside the sandbox, Falco triggers
 
 ## Stage 4 - Triggering the ALERT:
 
+### HOW TO RUN ###
+
+## To Run Web Server:
+###### Step 1
+*Go on wsl terminal*
+Type:
+  python3 email_webhook.py
+
+
+###### Step 2
 ## For Terminal 1:
 -Open up another Ubuntu():
 
@@ -108,21 +112,23 @@ Navigated through AgentShield folder:
 
     Type: start-falco
 
-
+###### Step 3
 ## For Terminal 2:
 -Open up another Ubuntu(Acts like an AI Agent(Attacker)):
 
 *How to activate attack:*
 Navigated through AgentShield folder:
-    cd~/AgentShield
 
 ```bash
+Type: ubuntu
 >
-chmod += scripts/simulate_escape.sh
+Type cd AgentShield
 >
-bash ./scripts/simulate_escape.sh
+sudo bash ./scripts/simulate_escape.sh
 >
 ```
+
+
 
 ## Expected Telemetry Output From Terminal 2:
 
@@ -131,6 +137,9 @@ When an unauthorized command execution occurs inside the sandbox, Falco triggers
 ```text
 [CRITICAL ALERT] Agent Sandbox Anomaly! Process=sh Command=sh -c whoami User=1000 Container=agentshield_sandbox
 ```
+
+Email of *audit* will be sent through receipent.
+| **Webhook Email Audit**  | [email-audit-webhook.JPG](https://github.com/PeraltaRonan/AgentShield-Sandbox/blob/main/Screenshots/email-audit_webhook.JPG) |
 
 
 
@@ -159,6 +168,11 @@ App Password = uurs veiw tsxi swvm
 | Evidence Phase | Github Link |
 | :--- | :--- |
 | **1. AI-AGENT** *(Pre-Attack)* | [AI-Agent(Attacker).JPG](https://github.com/PeraltaRonan/AgentShield-Sandbox/blob/main/Screenshots/AI-Agent(Attacker).JPG) |
-| **1. Falco Live Initialized** *(BEFORE ATTACKS)* | [Falco Live Initialized(BEFORE ATTACKS)](https://github.com/PeraltaRonan/AgentShield-Sandbox/blob/main/Screenshots/Falco_Live_initialized(BEFORE%20ATTACKS).JPG) |
-| **1. Falco_terminal(AFTER ATTACKS WITH ALERTS)** | [Falco_terminal(AFTER ATTACKS WITH ALERTS)](https://github.com/PeraltaRonan/AgentShield-Sandbox/blob/main/Screenshots/Falco_terminal(AFTER%20ATTACKS%20WITH%20ALERTS).JPG) |
-| **1. Sandbox Security_ Audit Passed** *(Pre-Attack)* | [Sandbox Security_ Audit Passed](https://github.com/PeraltaRonan/AgentShield-Sandbox/blob/main/Screenshots/sanbox_security_%20audit_passed.JPG) |
+| **2. Falco Live Initialized** *(BEFORE ATTACKS)* | [Falco Live Initialized(BEFORE ATTACKS)](https://github.com/PeraltaRonan/AgentShield-Sandbox/blob/main/Screenshots/Falco_Live_initialized(BEFORE%20ATTACKS).JPG) |
+| **3. Falco_terminal(AFTER ATTACKS WITH ALERTS)** | [Falco_terminal(AFTER ATTACKS WITH ALERTS)](https://github.com/PeraltaRonan/AgentShield-Sandbox/blob/main/Screenshots/Falco_terminal(AFTER%20ATTACKS%20WITH%20ALERTS).JPG) |
+| **4. Sandbox Security_ Audit Passed** *(Pre-Attack)* | [Sandbox Security_ Audit Passed](https://github.com/PeraltaRonan/AgentShield-Sandbox/blob/main/Screenshots/sanbox_security_%20audit_passed.JPG) |
+| **5. CI/CD Pipeline Workflow**  | [CI/CD-Pipeline.JPG](https://github.com/PeraltaRonan/AgentShield-Sandbox/blob/main/Screenshots/CICD%20Pipeline-workflow.JPG) |
+| **6. Webhook Email Audit**  | [email-audit-webhook.JPG](https://github.com/PeraltaRonan/AgentShield-Sandbox/blob/main/Screenshots/email-audit_webhook.JPG) |
+| **7. File Structure**  | [file_structure.JPG](https://github.com/PeraltaRonan/AgentShield-Sandbox/blob/main/Screenshots/file_structure.JPG) |
+| **8. Github Workflow**  | [github-workflow](https://github.com/PeraltaRonan/AgentShield-Sandbox/blob/main/Screenshots/github-workflow.JPG) |
+| **9. WSL2 Terminal Push Pipeline**  | [wsl-terminal-push-pipeline-proof.JPG](https://github.com/PeraltaRonan/AgentShield-Sandbox/blob/main/Screenshots/wsl-terminal-push-pipeline-proof.JPG) |
