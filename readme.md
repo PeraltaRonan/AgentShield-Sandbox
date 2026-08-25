@@ -39,9 +39,7 @@ The BBC article covers "The Great Sandbox Escape", where an autonomous AI model 
 
 
 ## File Structure
-| Evidence Phase |
-| :--- | :--- |
-| **File Structure**  | [file_structure.JPG](https://github.com/PeraltaRonan/AgentShield-Sandbox/blob/main/Screenshots/file_structure.JPG) |
+ | [file_structure.JPG](https://github.com/PeraltaRonan/AgentShield-Sandbox/blob/main/Screenshots/file_structure.JPG) |
 
 
 
